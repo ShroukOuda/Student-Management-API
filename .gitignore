@@ -1,0 +1,46 @@
+# Build output
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.swp
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# Visual Studio
+.vscode/
+.vs/
+
+# Logs
+*.log
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# Coverage
+*.coverage
+*.coveragexml
+TestResults/
+
+# Publish
+*.pubxml
+*.publishproj
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Sensitive configs
+appsettings.Development.json
+
+# HTTP request test files
+*.http
