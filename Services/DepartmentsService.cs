@@ -17,15 +17,15 @@ public class DepartmentsService : IDepartmentsService
         return await _context.Departments.ToListAsync();
     }
 
-    public async Task<Department> GetById(int Id)
+    public async Task<Department> GetById(int id)
     {
-        return await _context.Departments.FirstOrDefaultAsync(d => d.Id == Id);
+        return await _context.Departments.FirstOrDefaultAsync(d => d.Id == id);
     }
 
     public async Task<Department> CreateDepartment(Department department)
     {
         await _context.Departments.AddAsync(department);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         
         return department;
     }
@@ -33,7 +33,7 @@ public class DepartmentsService : IDepartmentsService
     public Department UpdateDeparment(Department department)
     {
         _context.Departments.Update(department);
-        _context.SaveChangesAsync();
+        _context.SaveChanges();
 
         return department;
     }
@@ -41,7 +41,7 @@ public class DepartmentsService : IDepartmentsService
     public Department DeleteDepartment(Department department)
     {
         _context.Departments.Remove(department);
-        _context.SaveChangesAsync();
+        _context.SaveChanges();
 
         return department;
     }

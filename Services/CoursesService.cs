@@ -24,21 +24,21 @@ public class CoursesService : ICoursesService
     public async Task<Course> CreateCourse(Course course)
     {
         await _context.Courses.AddAsync(course);
-        _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return course;
     }
 
     public Course UpdateCourse(Course course)
     {
         _context.Courses.Update(course);
-        _context.SaveChangesAsync();
+        _context.SaveChanges();
         return course;
     }
 
     public Course DeleteCourse(Course course)
     {
         _context.Courses.Remove(course);
-        _context.SaveChangesAsync();
+        _context.SaveChanges();
         return course;
     }
 }
