@@ -22,10 +22,10 @@ public class DepartmentsController : ControllerBase
         return Ok(departments);
     }
 
-    [HttpGet("{Id}")]
-    public async Task<IActionResult> GetById(int Id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var department = await _departmentsService.GetById(Id);
+        var department = await _departmentsService.GetById(id);
 
         return Ok(department);
     }
@@ -35,20 +35,24 @@ public class DepartmentsController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        await _departmentsService.CreateDepartment(department);
 
-        return Ok(department);
+        var newDepartment = new Department
+        {
+            Id = department.Id,
+            Name = department.Name,
+            ManagerName = department.ManagerName
+        };
+        await _departmentsService.CreateDepartment(newDepartment);
+
+        return Ok(newDepartment);
     }
 
-    [HttpPut("{Id}")]
-    public async Task<IActionResult> Update(Department department, int Id)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Department department, int id)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        var departmentFind = await _departmentsService.GetById(Id);
-
-        if (departmentFind == null)
-            return NotFound();
+        var departmentFind = await _departmentsService.GetById(id);
         
         departmentFind.Name = department.Name;
         departmentFind.ManagerName = department.ManagerName;
@@ -57,12 +61,11 @@ public class DepartmentsController : ControllerBase
         return Ok(departmentFind);
     }
 
-    [HttpDelete("{Id}")]
-    public async Task<IActionResult> Delete(int Id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
     {
-        var departmentFind = await _departmentsService.GetById(Id);
-        if (departmentFind == null)
-            return NotFound();
+        var departmentFind = await _departmentsService.GetById(id);
+
 
         _departmentsService.DeleteDepartment(departmentFind);
         return Ok(departmentFind);

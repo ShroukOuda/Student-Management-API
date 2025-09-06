@@ -23,15 +23,11 @@ public class StudentsController : ControllerBase
       return Ok(students);
    }
 
-   [HttpGet("{Id}")]
-   public async Task<IActionResult> GetById(int Id)
+   [HttpGet("{id}")]
+   public async Task<IActionResult> GetById(int id)
    {
-      var student = await _studentService.GetById(Id);
-
-      if (student == null)
-      {
-         return NotFound($"No Student Found with ID: {Id}");
-      }
+      var student = await _studentService.GetById(id);
+      
       return Ok(student);
    }
 
@@ -43,19 +39,30 @@ public class StudentsController : ControllerBase
          return BadRequest(ModelState);
       }
 
-      await _studentService.CreateStudent(student);
-      return Ok(student);
+      var newStudent = new Student
+      {
+         Id = student.Id,
+         FirstName = student.FirstName,
+         LastName = student.LastName,
+         Email = student.Email,
+         Phone = student.Phone,
+         Address = student.Address,
+         BirthDate = student.BirthDate,
+         GPA = student.GPA,
+         EnrollmentDate = student.EnrollmentDate,
+         DepartmentId = student.DepartmentId
+      };
+      await _studentService.CreateStudent(newStudent);
+      return Ok(newStudent);
    }
 
-   [HttpPut("{Id}")]
-   public async Task<IActionResult> Update(Student student, int Id)
+   [HttpPut("{id}")]
+   public async Task<IActionResult> Update(Student student, int id)
    {
       if (!ModelState.IsValid)
          return BadRequest(ModelState);
-      var studentFind = await _studentService.GetById(Id);
-
-      if (studentFind == null)
-         return NotFound();
+      var studentFind = await _studentService.GetById(id);
+      
       studentFind.FirstName = student.FirstName;
       studentFind.LastName = student.LastName;
       studentFind.Address = student.Address;
@@ -71,12 +78,11 @@ public class StudentsController : ControllerBase
       return Ok(studentFind);
    }
 
-   [HttpDelete("{Id}")]
-   public async Task<IActionResult> Delete(int Id)
+   [HttpDelete("{id}")]
+   public async Task<IActionResult> Delete(int id)
    {
-      var studentFind = await _studentService.GetById(Id);
-      if (studentFind == null)
-         return NotFound();
+      var studentFind = await _studentService.GetById(id);
+      
       _studentService.DeleteStudent(studentFind);
 
       return Ok(studentFind);
