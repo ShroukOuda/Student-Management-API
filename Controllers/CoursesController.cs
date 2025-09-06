@@ -24,10 +24,10 @@ public class CoursesController : ControllerBase
         return Ok(courses);
     }
 
-    [HttpGet("{Id}")]
-    public async Task<IActionResult> GetById(int Id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var course = await _coursesService.GetById(Id);
+        var course = await _coursesService.GetById(id);
 
         return Ok(course);
     }
@@ -37,20 +37,29 @@ public class CoursesController : ControllerBase
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-        
-        await _coursesService.CreateCourse(course);
-        return Ok(course);
+
+        var newCourse = new Course
+        {
+            Id = course.Id,
+            Name = course.Name,
+            Code = course.Code,
+            Credits = course.Credits,
+            Description = course.Description,
+            InstructorName = course.InstructorName,
+            MaxEnrollment = course.MaxEnrollment,
+            DepartmentId = course.DepartmentId 
+        };
+        await _coursesService.CreateCourse(newCourse);
+        return Ok(newCourse);
     }
 
-    [HttpPut("{Id}")]
-    public async Task<IActionResult> Update(Course course, int Id)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Course course, int id)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var courseFind = await _coursesService.GetById(Id);
-        if (courseFind == null)
-            return NotFound();
+        var courseFind = await _coursesService.GetById(id);
 
         courseFind.Name = course.Name;
         courseFind.Code = course.Code;
@@ -64,12 +73,11 @@ public class CoursesController : ControllerBase
         return Ok(courseFind);
     }
 
-    [HttpDelete("{Id}")]
-    public async Task<IActionResult> Delete(int Id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
     {
-        var course = await _coursesService.GetById(Id);
-        if (course == null)
-            return NotFound();
+        var course = await _coursesService.GetById(id);
+
         _coursesService.DeleteCourse(course);
         return Ok(course);
     }
