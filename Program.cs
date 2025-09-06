@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Student_Management_API.Data;
+using Student_Management_API.Filters;
+using Student_Management_API.Middlewares;
 using Student_Management_API.Services;
 
 namespace Student_Management_API;
@@ -14,12 +16,17 @@ public class Program
         builder.Services.AddScoped<IStudentsService, StudentsService>();
         builder.Services.AddScoped<IDepartmentsService, DepartmentsService>();
         builder.Services.AddScoped<ICoursesService, CoursesService>();
+        builder.Services.AddScoped<IEnrollmentsService, EnrollmentsService>();
+
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString)
         );
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<LogActivityFilter>();
+        });
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
@@ -34,6 +41,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseMiddleware<RateLimitingMiddleware>();
 
         app.UseHttpsRedirection();
 
