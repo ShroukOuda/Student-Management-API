@@ -3,6 +3,8 @@ using Student_Management_API.Data;
 using Student_Management_API.Filters;
 using Student_Management_API.Middlewares;
 using Student_Management_API.Services;
+using Microsoft.AspNetCore.Authentication;
+using Student_Management_API.Authentication;
 
 namespace Student_Management_API;
 
@@ -32,6 +34,10 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+       builder.Services.AddAuthentication("BasicAuthentication")
+            .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
