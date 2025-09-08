@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Student_Management_API.Filters;
 using Student_Management_API.Models;
 using Student_Management_API.Services;
 
@@ -10,13 +12,14 @@ namespace Student_Management_API.Controllers;
 public class CoursesController : ControllerBase
 {
     private readonly ICoursesService _coursesService;
-
+    
     public CoursesController(ICoursesService coursesService)
     {
         _coursesService = coursesService;
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var courses = await _coursesService.GetAll();
